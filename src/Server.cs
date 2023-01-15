@@ -16,6 +16,7 @@ try
     while (true)
     {
         using var socket = await server.AcceptSocketAsync();
+        // Send "PONG" to any incoming message on the socket.
         var pingResponse = Encoding.ASCII.GetBytes("+PONG\r\n");
         await socket.SendAsync(pingResponse, SocketFlags.None);
     }
