@@ -15,7 +15,6 @@ try
     server.Start();
     Console.WriteLine($"Server started with IP Address : {IP_ADDRESS} and port: {port}");
     using var tcpClient = server.AcceptTcpClient();
-    tcpClient.Client.Send(pingResponse, SocketFlags.None);
     using var streamReader = new StreamReader(tcpClient.GetStream());
     while (true)
     {
