@@ -12,13 +12,14 @@ TcpListener server = new TcpListener(IP_ADDRESS, port);
 try 
 {    
     server.Start();
-    var socket = await server.AcceptSocketAsync();
     Console.WriteLine($"Server started with IP Address : {IP_ADDRESS} and port: {port}");
-    while (true)
+    using var tcpClient = server.AcceptTcpClient();
+    using var streamReader = new StreamReader(tcpClient.GetStream());
+    while (!string.IsNullOrWhiteSpace(streamReader.ReadLine()))
     {
         // Send "PONG" to any incoming message on the socket.
         var pingResponse = Encoding.ASCII.GetBytes("+PONG\r\n");
-        await socket.SendAsync(pingResponse, SocketFlags.None);
+        tcpClient.Client.Send(pingResponse, SocketFlags.None);
     }
 }
 finally
