@@ -17,10 +17,14 @@ try
     using var tcpClient = server.AcceptTcpClient();
     tcpClient.Client.Send(pingResponse, SocketFlags.None);
     using var streamReader = new StreamReader(tcpClient.GetStream());
-    while (!string.IsNullOrWhiteSpace(streamReader.ReadLine()))
+    while (true)
     {
-        // Send "PONG" to any incoming message on the socket.        
-        tcpClient.Client.Send(pingResponse, SocketFlags.None);
+        var receivedMsg = streamReader.ReadLine();
+        if (!string.IsNullOrWhiteSpace(receivedMsg))
+        {
+            // Send "PONG" to any incoming message on the socket.        
+            tcpClient.Client.Send(pingResponse, SocketFlags.None);
+        }
     }
 }
 finally
